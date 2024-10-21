@@ -10,24 +10,24 @@ def main():
         while True:
             # แสดงเวลาปัจจุบัน
             current_time = datetime.datetime.now().strftime("%H:%M:%S")
-            print(f"เวลาปัจจุบัน: {current_time}")
+            print(f"Current time: {current_time}")
             
             # เปิด-ปิด LED
-            print("เปิด LED")
+            print("Turning on LED")
             led.on()
             sleep(1)
             
-            print("ปิด LED")
+            print("Turning off LED")
             led.off()
             sleep(1)
             
             print("-" * 20)  # แสดงเส้นคั่น
             
     except KeyboardInterrupt:
-        print("\nปิดโปรแกรม")
+        print("\nExiting program")
         led.off()  # ปิด LED ก่อนจบโปรแกรม
         
 if __name__ == "__main__":
-    print("เริ่มต้นโปรแกรม Raspberry Pi Demo")
-    print("กด Ctrl+C เพื่อปิดโปรแกรม")
+    print("Starting Raspberry Pi Demo")
+    print("Press Ctrl+C to exit the program")
     main()
