@@ -3,7 +3,7 @@ from time import sleep
 import datetime
 
 # กำหนด LED ที่ขา GPIO 17
-led = LED(17)
+led = LED(2)
 
 def main():
     try:
