@@ -7,10 +7,10 @@ GPIO.setmode(GPIO.BCM)  # ใช้หมายเลขพินแบบ BCM
 
 # กำหนดพินที่ใช้สำหรับไฟ LED ของแต่ละทิศทาง
 traffic_lights = {
-    "NORTH": {"RED": 17, "YELLOW": 27, "GREEN": 22},
-    "SOUTH": {"RED": 5, "YELLOW": 6, "GREEN": 13},
-    "EAST": {"RED": 19, "YELLOW": 26, "GREEN": 20},
-    "WEST": {"RED": 16, "YELLOW": 12, "GREEN": 21}
+    "NORTH": {"RED": 2, "YELLOW": 3, "GREEN": 4},
+    "SOUTH": {"RED": 17, "YELLOW": 21, "GREEN": 22},
+    "EAST": {"RED": 10, "YELLOW": 9, "GREEN": 11},
+    "WEST": {"RED": 5, "YELLOW": 6, "GREEN": 13}
 }
 
 # ตั้งค่าพินเป็น OUTPUT
