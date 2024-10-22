@@ -107,7 +107,7 @@ class TrafficLightController:
 if __name__ == "__main__":
     traffic_lights = {
         "NORTH": {"RED": 2, "YELLOW": 3, "GREEN": 4},
-        "SOUTH": {"RED": 17, "YELLOW": 21, "GREEN": 22},
+        "SOUTH": {"RED": 17, "YELLOW": 27, "GREEN": 22},
         "EAST": {"RED": 10, "YELLOW": 9, "GREEN": 11},
         "WEST": {"RED": 5, "YELLOW": 6, "GREEN": 13}
     }
