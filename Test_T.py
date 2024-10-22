@@ -106,10 +106,10 @@ class TrafficLightController:
 # ตัวอย่างการใช้งาน
 if __name__ == "__main__":
     traffic_lights = {
-        "NORTH": {"RED": 2, "YELLOW": 3, "GREEN": 4},
-        "SOUTH": {"RED": 17, "YELLOW": 27, "GREEN": 22},
-        "EAST": {"RED": 10, "YELLOW": 9, "GREEN": 11},
-        "WEST": {"RED": 5, "YELLOW": 6, "GREEN": 13}
+        "NORTH": {"RED": 4, "YELLOW": 3, "GREEN": 2},
+        "SOUTH": {"RED": 22, "YELLOW": 27, "GREEN": 17},
+        "EAST": {"RED": 11, "YELLOW": 9, "GREEN": 10},
+        "WEST": {"RED": 13, "YELLOW": 6, "GREEN": 5}
     }
     
     controller = TrafficLightController(traffic_lights)
