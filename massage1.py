@@ -1,7 +1,7 @@
 import socket
 
 # ตั้งค่าการเชื่อมต่อ
-host = 'IP_ADDRESS_OF_SERVER'  # IP Address ของโน๊ตบุ๊คที่เป็น Server
+host = '10.10.38.63'  # IP Address ของโน๊ตบุ๊คที่เป็น Server
 port = 12345
 
 # สร้าง socket object
