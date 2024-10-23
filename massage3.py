@@ -19,7 +19,7 @@ for direction in traffic_lights:
         GPIO.setup(traffic_lights[direction][color], GPIO.OUT)
 
 # กำหนดข้อมูลไคลเอนต์
-SERVER_IP = '127.0.0.1'  # IP ของเซิร์ฟเวอร์
+SERVER_IP = '10.10.38.63'  # IP ของเซิร์ฟเวอร์
 SERVER_PORT = 12345
 
 YELLOW_DURATION = 3
