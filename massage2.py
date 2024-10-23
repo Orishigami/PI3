@@ -1,5 +1,6 @@
 import socket
 import json
+import threading
 import RPi.GPIO as GPIO
 import time
 
@@ -42,7 +43,12 @@ max_green_durations = {
 custom_direction_order = ["NORTH", "EAST", "SOUTH", "WEST"]
 
 # กำหนดจำนวนรถเริ่มต้นในแต่ละทิศ
-car_counts = {}
+car_counts = {
+    "NORTH": 5,
+    "SOUTH": 7,
+    "EAST": 3,
+    "WEST": 4
+}
 
 def set_traffic_light(direction, color):
     # ปิดไฟทั้งหมดก่อนในทิศทางนั้น
@@ -68,8 +74,9 @@ def print_traffic_light_status(direction, light):
     print(f"Traffic light status: Direction = {direction}, Light = {light}")
 
 def receive_data_from_server():
+    global car_counts
     # ตั้งค่าการเชื่อมต่อ
-    host = '10.10.38.63'  # IP Address ของโน๊ตบุ๊คที่เป็น Server
+    host = '10.10.38.30'  # IP Address ของโน๊ตบุ๊คที่เป็น Server
     port = 12345
 
     # สร้าง socket object
@@ -87,6 +94,8 @@ def receive_data_from_server():
             server_car_counts = json.loads(data)
             for direction in server_car_counts.keys():
                 car_counts[direction] = server_car_counts.get(direction, car_counts.get(direction, 0))
+            # ปริ้นจำนวนรถเมื่อมีการอัปเดต
+            print_car_counts()
     finally:
         # ปิดการเชื่อมต่อ
         client_socket.close()
@@ -97,12 +106,15 @@ def main():
         current_direction = custom_direction_order[current_direction_index]
         current_light = "GREEN"
         light_start_time = time.time()
-        last_update_time = time.time()
-        last_car_decrease_time = time.time()
 
         # แสดงสถานะไฟเริ่มต้น
         print_traffic_light_status(current_direction, current_light)
         set_traffic_light(current_direction, "GREEN")
+
+        # สร้าง Thread สำหรับรับข้อมูลจาก Server
+        receive_thread = threading.Thread(target=receive_data_from_server)
+        receive_thread.daemon = True
+        receive_thread.start()
 
         while True:
             elapsed = time.time() - light_start_time
@@ -131,21 +143,6 @@ def main():
                 set_traffic_light(current_direction, "GREEN")
                 light_start_time = time.time()
                 print_traffic_light_status(current_direction, current_light)
-
-            # รับข้อมูลจาก server ทุกๆ 1 วินาที
-            if time.time() - last_update_time > 1:
-                receive_data_from_server()
-                last_update_time = time.time()
-                # ปริ้นจำนวนรถเมื่อมีการอัปเดต
-                print_car_counts()
-
-            # ลดจำนวนรถในทิศที่มีสัญญาณไฟเป็นสีเขียวหรือสีเหลืองทุกๆ วินาที
-            if time.time() - last_car_decrease_time > 1:
-                if current_light in ["GREEN", "YELLOW"]:
-                    car_counts[current_direction] = max(0, car_counts.get(current_direction, 0) - 1)
-                    # ปริ้นจำนวนรถเมื่อมีการลด
-                    print_car_counts()
-                last_car_decrease_time = time.time()
 
             time.sleep(0.1)  # ลดการใช้งาน CPU
 
