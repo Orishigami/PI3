@@ -22,9 +22,6 @@ for direction in traffic_lights:
 SERVER_IP = '10.10.38.63'  # IP ของเซิร์ฟเวอร์
 SERVER_PORT = 12345
 
-YELLOW_DURATION = 3
-ALL_RED_DURATION = 1.5
-
 def set_traffic_light(direction, color):
     for clr in traffic_lights[direction]:
         GPIO.output(traffic_lights[direction][clr], GPIO.LOW)
@@ -45,21 +42,25 @@ def main():
             # รอข้อมูลจากเซิร์ฟเวอร์เพื่อเปลี่ยนไฟ
             data = client_socket.recv(1024).decode()
             if data:
-                direction, command = data.split()
+                parts = data.split()
+                direction = parts[0]
+                command = parts[1]
+                yellow_duration = float(parts[2])
+                all_red_duration = float(parts[3])
+
                 if command == "skip_next":
                     print(f"Received skip signal for {direction}. Skipping to next direction.")
                     continue
-
-                print(f"Received from server: {data}")
-
-                set_traffic_light(direction, "GREEN")
-                time.sleep(green_durations[direction])  # ใช้เวลาตามที่กำหนดใน green_durations
-
+                elif command == "normal_duration":
+                    print(f"Received normal duration for {direction}. Setting green light.")
+                    set_traffic_light(direction, "GREEN")
+                    time.sleep(green_durations[direction])
+                
                 set_traffic_light(direction, "YELLOW")
-                time.sleep(YELLOW_DURATION)
+                time.sleep(yellow_duration)
 
                 turn_all_red()
-                time.sleep(ALL_RED_DURATION)
+                time.sleep(all_red_duration)
 
     except KeyboardInterrupt:
         pass
