@@ -1,33 +1,30 @@
 from flask import Flask, Response
-from picamera import PiCamera
-from time import sleep
-import io
+import cv2
+import subprocess
 
 app = Flask(__name__)
 
-# ตั้งค่ากล้อง CSI
-camera = PiCamera()
-camera.resolution = (640, 480)  # กำหนดความละเอียดของภาพ
-camera.framerate = 24  # กำหนดอัตราเฟรม
-
 def generate_frames():
-    with camera as cam:
-        # เปิดสตรีมวิดีโอ
-        cam.start_preview()
-        sleep(2)  # รอให้กล้องเตรียมพร้อม
+    # เปิด libcamera-vid ผ่าน subprocess
+    command = [
+        'libcamera-vid', '-t', '0', '--inline', '--width', '640', '--height', '480',
+        '--framerate', '24', '-o', '-'
+    ]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
 
-        stream = io.BytesIO()
-        for _ in cam.capture_continuous(stream, format='jpeg', use_video_port=True):
-            # รีเซ็ต stream ก่อนบันทึกข้อมูลใหม่
-            stream.seek(0)
-            frame = stream.read()
+    while True:
+        # อ่านข้อมูลจาก stdout ของ subprocess
+        frame = process.stdout.read(640 * 480 * 3)
+        if not frame:
+            break
 
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        # ใช้ OpenCV เพื่อเข้ารหัสเป็น JPEG
+        img = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8), cv2.IMREAD_COLOR)
+        ret, buffer = cv2.imencode('.jpg', img)
+        frame = buffer.tobytes()
 
-            # ล้าง stream สำหรับการจับภาพครั้งถัดไป
-            stream.seek(0)
-            stream.truncate()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/video_feed')
 def video_feed():
