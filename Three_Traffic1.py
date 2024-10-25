@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 import socket
 import json
-import time
 
 # ตั้งค่า GPIO
 GPIO.setmode(GPIO.BCM)
