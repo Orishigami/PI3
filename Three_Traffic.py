@@ -24,7 +24,7 @@ initial_green_duration = {
 }
 
 YELLOW_DURATION = 3
-RED_DURATION = 5
+ALL_RED_DURATION = 1.5
 
 def set_traffic_light(direction, color):
     # ปิดไฟทั้งหมดก่อนในฝั่งนั้น
@@ -32,6 +32,11 @@ def set_traffic_light(direction, color):
         GPIO.output(traffic_lights[direction][clr], GPIO.LOW)
     # เปิดไฟตามสีที่กำหนด
     GPIO.output(traffic_lights[direction][color], GPIO.HIGH)
+
+def turn_all_red():
+    # เปิดไฟแดงทุกฝั่ง (ใช้ในกรณีที่ต้องการทำให้ทุกฝั่งหยุดพร้อมกัน)
+    for direction in traffic_lights:
+        set_traffic_light(direction, "RED")
 
 def cycle_traffic_lights():
     try:
@@ -43,6 +48,11 @@ def cycle_traffic_lights():
             current_direction = custom_direction_order[current_direction_index]
             green_time = initial_green_duration[current_direction]
             
+            # ตั้งค่าไฟแดงให้กับทุกฝั่งก่อน
+            for direction in custom_direction_order:
+                if direction != current_direction:
+                    set_traffic_light(direction, "RED")
+
             # แสดงไฟเขียวในฝั่งปัจจุบัน
             set_traffic_light(current_direction, "GREEN")
             print(f"ฝั่ง {current_direction}: ไฟเขียว {green_time} วินาที")
@@ -53,10 +63,10 @@ def cycle_traffic_lights():
             print(f"ฝั่ง {current_direction}: ไฟเหลือง {YELLOW_DURATION} วินาที")
             time.sleep(YELLOW_DURATION)  # รอ 3 วินาที
 
-            # เปลี่ยนเป็นไฟแดง
-            set_traffic_light(current_direction, "RED")
-            print(f"ฝั่ง {current_direction}: ไฟแดง {RED_DURATION} วินาที")
-            time.sleep(RED_DURATION)  # รอ 5 วินาที
+            # เปิดไฟแดงในทุกฝั่ง
+            turn_all_red()
+            print("ทุกฝั่ง: ไฟแดง")
+            time.sleep(ALL_RED_DURATION)  # รอเป็นระยะเวลาที่กำหนด
 
             # เปลี่ยนไปฝั่งถัดไป
             current_direction_index = (current_direction_index + 1) % len(custom_direction_order)
