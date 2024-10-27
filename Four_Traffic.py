@@ -167,4 +167,4 @@ class TrafficLightController:
         print("ทำความสะอาดระบบเรียบร้อย")
 
 def main():
-    HOST = '10.10.38.63'  # แก
+    HOST = '10.10.38.205'  
