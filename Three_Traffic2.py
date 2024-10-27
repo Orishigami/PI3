@@ -156,7 +156,7 @@ class TrafficLightController:
         GPIO.cleanup()
 
 def main():
-    HOST = '10.10.38.63'
+    HOST = '10.10.38.205'
     PORT = 5000
     
     controller = TrafficLightController(HOST, PORT)
