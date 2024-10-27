@@ -152,7 +152,7 @@ class TrafficLightController:
         print("ทำความสะอาดระบบเรียบร้อย")
 
 def main():
-    HOST = '10.10.38.205'  # Change to your server IP
+    HOST = '10.10.33.205'  # Change to your server IP
     PORT = 5000
     
     controller = TrafficLightController(HOST, PORT)
