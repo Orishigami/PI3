@@ -12,10 +12,10 @@ class TrafficLightController:
         
         # Traffic light pin configuration
         self.traffic_lights = {
-            "A": {"RED": 4, "YELLOW": 3, "GREEN": 2},      # ทิศเหนือ
-            "B": {"RED": 22, "YELLOW": 27, "GREEN": 17},   # ทิศตะวันออก
-            "C": {"RED": 11, "YELLOW": 9, "GREEN": 10},    # ทิศใต้
-            "D": {"RED": 5, "YELLOW": 6, "GREEN": 13}      # ทิศตะวันตก
+            "A": {"RED": 4, "YELLOW": 3, "GREEN": 2},      # เหนือ
+            "B": {"RED": 22, "YELLOW": 27, "GREEN": 17},   # ตะวันออก
+            "C": {"RED": 11, "YELLOW": 9, "GREEN": 10},    # ใต้
+            "D": {"RED": 5, "YELLOW": 6, "GREEN": 13}      # ตะวันตก
         }
         
         # Initialize GPIO pins
@@ -26,14 +26,6 @@ class TrafficLightController:
         self.port = port
         self.socket = None
         self.is_running = False
-        
-        # Direction names for logging
-        self.direction_names = {
-            "A": "เหนือ",
-            "B": "ตะวันออก",
-            "C": "ใต้",
-            "D": "ตะวันตก"
-        }
     
     def _setup_gpio(self) -> None:
         """Initialize all GPIO pins as OUTPUT"""
@@ -41,7 +33,7 @@ class TrafficLightController:
             for color, pin in self.traffic_lights[direction].items():
                 try:
                     GPIO.setup(pin, GPIO.OUT)
-                    GPIO.output(pin, GPIO.LOW)  # Ensure all lights start OFF
+                    GPIO.output(pin, GPIO.LOW)
                 except Exception as e:
                     print(f"Error setting up GPIO pin {pin}: {e}")
                     raise
@@ -50,18 +42,12 @@ class TrafficLightController:
         """Set all directions to RED except the specified direction"""
         for direction in self.traffic_lights:
             if direction != except_direction:
-                # Turn off all lights first
                 for color in self.traffic_lights[direction]:
                     GPIO.output(self.traffic_lights[direction][color], GPIO.LOW)
-                # Turn on RED light
                 GPIO.output(self.traffic_lights[direction]["RED"], GPIO.HIGH)
     
     def set_traffic_light(self, direction: str, color: str) -> bool:
-        """
-        Control LED state for specified direction and color.
-        If GREEN is set for any direction, all other directions will be set to RED.
-        Returns: True if successful, False otherwise
-        """
+        """Control LED state for specified direction and color"""
         try:
             if direction not in self.traffic_lights:
                 print(f"Invalid direction: {direction}")
@@ -71,20 +57,21 @@ class TrafficLightController:
                 print(f"Invalid color: {color}")
                 return False
             
-            # If setting GREEN, set all other directions to RED first
             if color == "GREEN":
                 self._set_all_red_except(direction)
             
-            # Turn off all lights in this direction
             for clr in self.traffic_lights[direction]:
                 GPIO.output(self.traffic_lights[direction][clr], GPIO.LOW)
             
-            # Turn on requested light
             GPIO.output(self.traffic_lights[direction][color], GPIO.HIGH)
             
-            # Log the change with direction name
-            print(f"เปลี่ยนไฟจราจรฝั่ง {direction} ({self.direction_names[direction]}) เป็นสี {color}")
-            
+            directions = {
+                "A": "เหนือ",
+                "B": "ตะวันออก",
+                "C": "ใต้",
+                "D": "ตะวันตก"
+            }
+            print(f"ตั้งค่าไฟจราจรฝั่ง {direction} ({directions[direction]}) เป็นสี {color}")
             return True
             
         except Exception as e:
@@ -95,7 +82,7 @@ class TrafficLightController:
         """Establish connection to the server"""
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.settimeout(5)  # 5 second timeout
+            self.socket.settimeout(5)
             self.socket.connect((self.host, self.port))
             print(f"Connected to server {self.host}:{self.port}")
             return True
@@ -117,8 +104,6 @@ class TrafficLightController:
                 return False
             
             success = self.set_traffic_light(command["direction"], command["color"])
-            if success and command.get("car_count") is not None:
-                print(f"จำนวนรถฝั่ง {command['direction']} ({self.direction_names[command['direction']]}): {command['car_count']} คัน")
             return success
             
         except json.JSONDecodeError:
@@ -131,15 +116,15 @@ class TrafficLightController:
     def run(self) -> None:
         """Main loop to receive and process commands"""
         self.is_running = True
-        reconnect_delay = 1  # Initial reconnect delay (seconds)
+        reconnect_delay = 1
         
         while self.is_running:
             if not self.socket:
                 if not self.connect():
                     time.sleep(reconnect_delay)
-                    reconnect_delay = min(reconnect_delay * 2, 60)  # Exponential backoff
+                    reconnect_delay = min(reconnect_delay * 2, 60)
                     continue
-                reconnect_delay = 1  # Reset delay after successful connection
+                reconnect_delay = 1
             
             try:
                 data = self.socket.recv(1024).decode()
@@ -167,4 +152,17 @@ class TrafficLightController:
         print("ทำความสะอาดระบบเรียบร้อย")
 
 def main():
-    HOST = '10.10.38.205'  
+    HOST = '10.10.38.205'  # Change to your server IP
+    PORT = 5000
+    
+    controller = TrafficLightController(HOST, PORT)
+    
+    try:
+        controller.run()
+    except KeyboardInterrupt:
+        print("\nปิดระบบ...")
+    finally:
+        controller.cleanup()
+
+if __name__ == "__main__":
+    main()
