@@ -38,7 +38,7 @@ class TrafficLightController:
             "A": {"RED": 4, "YELLOW": 3, "GREEN": 2},    # ทิศเหนือ
             "B": {"RED": 22, "YELLOW": 27, "GREEN": 17}, # ทิศตะวันออก
             "C": {"RED": 11, "YELLOW": 9, "GREEN": 10},   # ทิศใต้
-            "D": {"RED": 5, "YELLOW": 6, "GREEN": 13}      # ตะวันตก
+            "D": {"RED": 13, "YELLOW": 6, "GREEN": 5}      # ตะวันตก
         }
         
         # Initialize GPIO pins
