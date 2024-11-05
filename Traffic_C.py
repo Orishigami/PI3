@@ -12,12 +12,7 @@ class TrafficLightController:
         
         # การกำหนดค่าเริ่มต้นสำหรับส่งไปยัง server
         self.config = {
-            "camera_ids": {  # กำหนด camera_id ที่สอดคล้องกับทิศทางแต่ละฝั่ง
-                "A": 3,  # ทิศเหนือ = camera_id 3
-                "B": 0,  # ทิศตะวันออก = camera_id 0
-                "C": 1,  # ทิศใต้ = camera_id 1
-                "D": 2   # ทิศตะวันตก = camera_id 2
-            },
+            "camera_ids": [0, 1, 2, 3],
             "direction_names": {
                 "A": "เหนือ",
                 "B": "ตะวันออก",
