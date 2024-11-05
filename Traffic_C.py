@@ -12,6 +12,12 @@ class TrafficLightController:
         
         # การกำหนดค่าเริ่มต้นสำหรับส่งไปยัง server
         self.config = {
+            "camera_ids": {  # กำหนด camera_id ที่สอดคล้องกับทิศทางแต่ละฝั่ง
+                "A": 3,  # ทิศเหนือ = camera_id 3
+                "B": 0,  # ทิศตะวันออก = camera_id 0
+                "C": 1,  # ทิศใต้ = camera_id 1
+                "D": 2   # ทิศตะวันตก = camera_id 2
+            },
             "direction_names": {
                 "A": "เหนือ",
                 "B": "ตะวันออก",
@@ -116,6 +122,7 @@ class TrafficLightController:
             config_json = json.dumps(self.config)
             self.socket.send(config_json.encode())
             print("Sent configuration to server:")
+            print(f"Camera IDs: {self.config['camera_ids']}")
             print(f"Direction names: {self.config['direction_names']}")
             print(f"Direction order: {self.config['direction_order']}")
             print(f"Green durations: {self.config['green_durations']}")
