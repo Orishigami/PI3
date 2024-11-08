@@ -190,7 +190,7 @@ class TrafficLightController:
 
 def main():
     # กำหนด IP address ของ server
-    HOST = '10.10.57.7'  # แก้ไขเป็น IP address ของ server
+    HOST = '10.10.42.167'  # แก้ไขเป็น IP address ของ server
     PORT = 5000
     
     controller = TrafficLightController(HOST, PORT)
