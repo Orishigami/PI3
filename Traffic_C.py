@@ -14,10 +14,10 @@ class TrafficLightController:
         self.config = {
             "camera_ids": [0, 1, 2, 3],
             "direction_names": {
-                "A": "เหนือ",
-                "B": "ตะวันออก",
-                "C": "ใต้",
-                "D": "ตะวันตก"
+                "A": "North",
+                "B": "East",
+                "C": "South",
+                "D": "West"
             },
             "direction_order": ["A", "B", "C", "D"],
             "green_durations": {
