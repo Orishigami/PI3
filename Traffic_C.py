@@ -12,12 +12,7 @@ class TrafficLightController:
         
         # การกำหนดค่าเริ่มต้นสำหรับส่งไปยัง server
         self.config = {
-            "camera_ids": {
-                "A": 0,
-                "B": 1,
-                "C": 2,
-                "D": 3
-            },
+            "camera_ids": [0, 1, 2, 3],
             "direction_names": {
                 "A": "North",
                 "B": "East",
