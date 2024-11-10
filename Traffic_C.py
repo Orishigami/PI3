@@ -19,7 +19,7 @@ class TrafficLightController:
                 "C": "South",
                 "D": "West"
             },
-            "direction_order": ["B", "A", "C", "D"],
+            "direction_order": ["A", "B", "C", "D"],
             "green_durations": {
                 "A": 15,
                 "B": 12,
