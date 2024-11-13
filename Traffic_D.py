@@ -26,10 +26,10 @@ class TrafficLightController:
             },
             "direction_order": ["A", "B", "C", "D"],
             "green_durations": {
-                "A": 15,
-                "B": 10,
-                "C": 15,
-                "D": 9
+                "A": 10,
+                "B": 15,
+                "C": 10,
+                "D": 15
             },
             "max_green_durations": {
                 "A": 30,
