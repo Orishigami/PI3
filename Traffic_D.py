@@ -14,9 +14,9 @@ class TrafficLightController:
         self.config = {
             "camera_ids": {
                 "A": 1,
-                "B": 3,
+                "B": 4,
                 "C": 0,
-                "D": 4
+                "D": 3
             },
             "direction_names": {
                 "A": "North",
