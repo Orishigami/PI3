@@ -14,7 +14,7 @@ class TrafficLightController:
         self.config = {
             "camera_ids": {
                 "A": 1,
-                "B": 2,
+                "B": 3,
                 "C": 0,
                 "D": 4
             },
@@ -27,15 +27,15 @@ class TrafficLightController:
             "direction_order": ["A", "B", "C", "D"],
             "green_durations": {
                 "A": 15,
-                "B": 12,
-                "C": 10,
+                "B": 10,
+                "C": 15,
                 "D": 9
             },
             "max_green_durations": {
-                "A": 20,
-                "B": 20,
-                "C": 20,
-                "D": 20
+                "A": 30,
+                "B": 30,
+                "C": 30,
+                "D": 30
             }
         }
         
